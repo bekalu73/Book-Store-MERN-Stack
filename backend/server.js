@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 // import { PORT, MONGODB_URI } from "./config.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -17,6 +18,7 @@ const DBConnection = async () => {
 
 // Middleware for parsing request body
 app.use(express.json());
+app.use(cors());
 app.use("/books", booksRoute);
 
 app.listen(process.env.PORT, () => {
