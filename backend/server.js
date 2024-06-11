@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
+import booksRoute from "./routes/booksRoute.js";
 const app = express();
 
 const DBConnection = async () => {
@@ -14,10 +15,9 @@ const DBConnection = async () => {
   }
 };
 
-app.get("/", (req, res) => {
-  console.log("this is home page");
-  res.send("home");
-});
+// Middleware for parsing request body
+app.use(express.json());
+app.use("/books", booksRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is Listening on http://localhost:${process.env.PORT}`);
