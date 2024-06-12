@@ -3,6 +3,7 @@ import BackButton from "../components/BackButton.jsx";
 import Spinner from "../components/Spinners.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const CreateBooks = () => {
   const [title, setTitle] = useState("");
@@ -10,6 +11,7 @@ const CreateBooks = () => {
   const [publishYear, setPublishYear] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSaveBook = () => {
     const data = {
@@ -22,47 +24,57 @@ const CreateBooks = () => {
       .post("http://localhost:5000/books", data)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar("Book Created successfully", { variant: "success" });
         navigate("/");
       })
       .catch((error) => {
         setLoading(false);
+        enqueueSnackbar("Error", { variant: "error" });
         console.log(error);
       });
   };
+
   return (
-    <div className="p-4">
+    <div className="p-6 bg-gray-100 min-h-screen">
       <BackButton />
-      <h1 className="text-3xl my-4">Create Book</h1>
-      {loading ? <Spinner /> : ""}
-      <div className="flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Title</label>
+      <h1 className="text-4xl font-bold text-gray-800 my-8 text-center">
+        Create Book
+      </h1>
+      {loading && <Spinner />}
+      <div className="flex flex-col bg-white shadow-lg rounded-xl w-full max-w-xl p-8 mx-auto">
+        <div className="mb-6">
+          <label className="block text-xl text-gray-700 mb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border-2 border-gray-500 px-4 py-2 w-full"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Author</label>
+        <div className="mb-6">
+          <label className="block text-xl text-gray-700 mb-2">Author</label>
           <input
             type="text"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            className="border-2 border-gray-500 px-4 py-2  w-full "
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500">Publish Year</label>
+        <div className="mb-6">
+          <label className="block text-xl text-gray-700 mb-2">
+            Publish Year
+          </label>
           <input
             type="number"
             value={publishYear}
             onChange={(e) => setPublishYear(e.target.value)}
-            className="border-2 border-gray-500 px-4 py-2  w-full "
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button className="p-2 bg-sky-300 m-8" onClick={handleSaveBook}>
+        <button
+          onClick={handleSaveBook}
+          className="w-full py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+        >
           Save
         </button>
       </div>
